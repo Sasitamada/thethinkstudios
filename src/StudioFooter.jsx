@@ -18,7 +18,7 @@ export default function StudioFooter() {
               <a href="/meet-karthik">Meet Karthik</a>
               <a href="/#films">Gallery</a>
               <a href="/#journal">Journal</a>
-              <a href="/contact">Book us now</a>
+              <a href="/contact">Contact us</a>
             </nav>
             <div className="studio-footer__column">
               <h2>[Studio]</h2>

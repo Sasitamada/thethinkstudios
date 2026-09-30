@@ -1501,7 +1501,10 @@ h2 {
 }
 
 /* Shared navigation keeps the same geometry on each page. */
-.masthead--page { position: relative; inset: auto; background: #182323; }
+.masthead--page { position: relative; inset: auto; background: transparent; }
+.masthead--page .wordmark img { filter: brightness(0); }
+.masthead--page .nav-links a { color: #171717; }
+.contact-page { background: #e2dfd2; }
 
 /* Extend the private-commission palette across the home editorial sections. */
 .site-shell :is(.intro, .experience, .featured-films, .recent-frames, .journal, .booking) {

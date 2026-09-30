@@ -246,7 +246,7 @@ function App() {
           once-in-a-lifetime glow.
         </p>
         <a className="primary-link" href="/contact">
-          Book us now
+          Contact us
         </a>
       </section>
 
@@ -360,7 +360,7 @@ function App() {
       <section className="booking" id="book">
         <h2>Be the star in your own story.</h2>
         <a className="book-button" href="/contact">
-          Book us now
+          Contact us
         </a>
         <div className="footer-social">
           <a href="https://www.instagram.com/the_thinkstudios/" target="_blank">
