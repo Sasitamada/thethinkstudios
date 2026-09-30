@@ -1,40 +1,8 @@
 import { useEffect, useState } from 'react'
 import logo from './assets/logo-header.png'
-import footerLogo from './assets/logo.png'
 import './App.css'
-
-const icons = {
-  menu:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLW1lbnUtaWNvbiBsdWNpZGUtbWVudSI+PHBhdGggZD0iTTQgNWgxNiIvPjxwYXRoIGQ9Ik00IDEyaDE2Ii8+PHBhdGggZD0iTTQgMTloMTYiLz48L3N2Zz4=',
-  search:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXNlYXJjaC1pY29uIGx1Y2lkZS1zZWFyY2giPjxwYXRoIGQ9Im0yMSAyMS00LjM0LTQuMzQiLz48Y2lyY2xlIGN4PSIxMSIgY3k9IjExIiByPSI4Ii8+PC9zdmc+',
-  close:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXgtaWNvbiBsdWNpZGUteCI+PHBhdGggZD0iTTE4IDYgNiAxOCIvPjxwYXRoIGQ9Im02IDYgMTIgMTIiLz48L3N2Zz4=',
-  left:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tbGVmdC1pY29uIGx1Y2lkZS1jaGV2cm9uLWxlZnQiPjxwYXRoIGQ9Im0xNSAxOC02LTYgNi02Ii8+PC9zdmc+',
-  right:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tcmlnaHQtaWNvbiBsdWNpZGUtY2hldnJvbi1yaWdodCI+PHBhdGggZD0ibTkgMTggNi02LTYtNiIvPjwvc3ZnPg==',
-  phone:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXBob25lLWljb24gbHVjaWRlLXBob25lIj48cGF0aCBkPSJNMTMuODMyIDE2LjU2OGExIDEgMCAwIDAgMS4yMTMtLjMwM2wuMzU1LS40NjVBMiAyIDAgMCAxIDE3IDE1aDNhMiAyIDAgMCAxIDIgMnYzYTIgMiAwIDAgMS0yIDJBMTggMTggMCAwIDEgMiA0YTIgMiAwIDAgMSAyLTJoM2EyIDIgMCAwIDEgMiAydjNhMiAyIDAgMCAxLS44IDEuNmwtLjQ2OC4zNTFhMSAxIDAgMCAwLS4yOTIgMS4yMzMgMTQgMTQgMCAwIDAgNi4zOTIgNi4zODQiLz48L3N2Zz4=',
-  instagram:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxyZWN0IHg9IjMiIHk9IjMiIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgcng9IjUiIHJ5PSI1Ii8+PHBhdGggZD0iTTE2IDExLjk0QTQgNCAwIDEgMSAxMi4wNiA4IDQgNCAwIDAgMSAxNiAxMS45NHoiLz48bGluZSB4MT0iMTcuNSIgeTE9IjYuNSIgeDI9IjE3LjUxIiB5Mj0iNi41Ii8+PC9zdmc+',
-  youtube:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxyZWN0IHg9IjIiIHk9IjYiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxMiIgcng9IjMiLz48cG9seWdvbiBwb2ludHM9IjEwIDE1IDE2IDEyIDEwIDkiIGZpbGw9ImN1cnJlbnRDb2xvciIgc3Ryb2tlPSJub25lIi8+PC9zdmc+',
-  facebook:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xOCAySDZhNCA0IDAgMCAwLTQgNHYxMmE0IDQgMCAwIDAgNCA0aDZ2LTdoLTJ2LTNoMlY5LjVhMy41IDMuNSAwIDAgMSAzLjUtMy41SDE4djNoLTIuNWEuNS41IDAgMCAwLS41LjV2MkgxOHYzaC0zVjIyaDNhNCA0IDAgMCAwIDQtNFY2YTQgNCAwIDAgMC00LTR6IiBmaWxsPSJjdXJyZW50Q29sb3IiIHN0cm9rZT0ibm9uZSIvPjwvc3ZnPg==',
-  home:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Im0zIDExIDktOSA5IDkiLz48cGF0aCBkPSJNNCAxMHYxMGEyIDIgMCAwIDAgMiAyaDEyYTIgMiAwIDAgMCAyLTJWMTAiLz48cGF0aCBkPSJNOSAyMnYtNmg2djYiLz48L3N2Zz4=',
-  journal:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik00IDE5LjVBNi41IDYuNSAwIDAgMSAxMC41IDEzSDIwIi8+PHBhdGggZD0iTTQgNGEyIDIgMCAwIDEgMi0yaDExdjE4SDYuNWEyLjUgMi41IDAgMCAxIDAtNUgyMCIvPjxwYXRoIGQ9Ik04IDdoNiIvPjxwYXRoIGQ9Ik04IDEwaDYiLz48L3N2Zz4=',
-  book:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xOSAyMUg3YTIgMiAwIDAgMS0yLTJWNWExIDEgMCAwIDEgMS0xaDE0YTEgMSAwIDAgMSAxIDF2MTQiLz48cGF0aCBkPSJNNSA3aDE0Ii8+PC9zdmc+',
-  film:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxOCIgcng9IjIiLz48cGF0aCBkPSJNNyAzVjIxIi8+PHBhdGggZD0iTTE3IDNWMjEiLz48cGF0aCBkPSJNMiA4aDUiLz48cGF0aCBkPSJNMiAxNmg1Ii8+PHBhdGggZD0iTTE3IDhoNSIvPjxwYXRoIGQ9Ik0xNyAxNmg1Ii8+PC9zdmc+',
-  clock:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEwIi8+PHBhdGggZD0iTTEyIDZ2Nmw0IDIiLz48L3N2Zz4=',
-  map:
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLW1hcC1waW4taWNvbiBsdWNpZGUtbWFwLXBpbiI+PHBhdGggZD0iTTIwIDEwYzAgNC45OTMtNS41MzkgMTAuMTkzLTcuMzk5IDExLjc5OWExIDEgMCAwIDEtMS4yMDIgMEM5LjUzOSAyMC4xOTMgNCAxNC45OTMgNCAxMGE4IDggMCAwIDEgMTYgMCIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiLz48L3N2Zz4=',
-}
+import WeddingAlbums from './WeddingAlbums'
+import EnquiryForm from './EnquiryForm'
 
 const gallery = [
   {
@@ -56,29 +24,6 @@ const gallery = [
   {
     src: '/optimized/gallery-06.jpg',
     alt: 'Destination wedding celebration by the thinkstudios',
-  },
-]
-
-const heroSlides = [
-  {
-    src: '/optimized/hero-dsc-9338.jpg',
-    alt: 'Wedding portrait from the thinkstudios hero story',
-  },
-  {
-    src: '/optimized/hero-dsc-9329.jpg',
-    alt: 'Cinematic wedding frame from the thinkstudios hero story',
-  },
-  {
-    src: '/optimized/hero-12.jpg',
-    alt: 'Wedding couple portrait from the thinkstudios hero story',
-  },
-  {
-    src: '/optimized/hero-14.jpg',
-    alt: 'Warm evening wedding frame from the thinkstudios hero story',
-  },
-  {
-    src: '/optimized/hero-raw-04.jpg',
-    alt: 'Editorial wedding photograph from the thinkstudios hero story',
   },
 ]
 
@@ -107,161 +52,197 @@ const recentFrames = [
 const publicStories = [
   {
     src: '/optimized/gallery-03-3.jpg',
+    title: 'A celebration of love',
     alt: 'Wedding frame from a recent public gallery upload',
   },
   {
     src: '/optimized/gallery-14-3.jpg',
+    title: 'Together, always',
     alt: 'Portrait moment from a newly added celebration story',
   },
   {
     src: '/optimized/gallery-15-3.jpg',
+    title: 'Just the two of you',
     alt: 'Couple frame from the thinkstudios public archive',
   },
   {
     src: '/optimized/gallery-16.jpg',
+    title: 'Joy in every frame',
     alt: 'Event portrait from the public gallery archive',
   },
   {
     src: '/optimized/gallery-dsc-9271.jpg',
+    title: 'Promises & traditions',
     alt: 'Wedding still from the DSC archive set',
   },
   {
     src: '/optimized/gallery-dsc-9318.jpg',
+    title: 'The wedding ceremony',
     alt: 'Ceremony frame from the DSC archive set',
   },
   {
     src: '/optimized/gallery-dsc-9329.jpg',
+    title: 'Timeless portraits',
     alt: 'Editorial wedding portrait from the DSC archive set',
   },
   {
     src: '/optimized/gallery-dsc-9335.jpg',
+    title: 'Moments that matter',
     alt: 'Documentary wedding moment from the DSC archive set',
   },
   {
     src: '/optimized/gallery-dsc-9338.jpg',
+    title: 'The wedding story',
     alt: 'Candid celebration photo from the DSC archive set',
   },
   {
     src: '/optimized/gallery-dsc-9346.jpg',
+    title: 'Forever in a frame',
     alt: 'Wedding portrait from the DSC archive set',
   },
 ]
 
-const menuItems = [
-  {
-    href: 'https://www.instagram.com/the_thinkstudios/',
-    label: 'Instagram',
-    icon: 'instagram',
-    external: true,
-  },
-  { href: '#top', label: 'Home', icon: 'home' },
-  { href: '#journal', label: 'Journal', icon: 'journal' },
-  { href: '#book', label: 'Book us now', icon: 'book' },
-  { href: '#films', label: 'Wedding Films', icon: 'film' },
+
+const progressSegments = [
+  14, 14, 14, 14, 20, 30, 20, 14, 14, 14, 14, 14,
+  14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
 ]
 
-function App() {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [currentSlide, setCurrentSlide] = useState(0)
+function ScrollProgress({ side, activeIndex }) {
+  return (
+    <div
+      className={`scroll-progress scroll-progress--${side}`}
+      aria-hidden="true"
+    >
+      {progressSegments.map((_, index) => (
+        <span
+          key={`${side}-${index}`}
+          className={`scroll-progress__seg ${index === activeIndex ? 'is-active' : ''}`}
+          style={{ '--seg-w': `${index === activeIndex ? 30 : Math.abs(index - activeIndex) === 1 ? 20 : 14}px` }}
+        />
+      ))}
+    </div>
+  )
+}
+
+const introLines = ['Your wedding is a feeling.', 'We frame it to last forever.']
+const introWordCount = introLines.join(' ').split(' ').length
+
+function HomeIntro() {
+  const [visible, setVisible] = useState(() => !window.location.hash)
+  const [wordCount, setWordCount] = useState(0)
+  const [leaving, setLeaving] = useState(false)
 
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      setCurrentSlide((slide) => (slide + 1) % heroSlides.length)
-    }, 4500)
+    if (!visible) return
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const timers = []
+    const finish = () => setVisible(false)
+    for (let index = 1; index <= introWordCount; index += 1) {
+      timers.push(window.setTimeout(() => setWordCount(index), reducedMotion ? 0 : 300 + index * 160))
+    }
+    const leaveAt = reducedMotion ? 1000 : 300 + introWordCount * 160 + 700
+    timers.push(window.setTimeout(() => setLeaving(true), leaveAt))
+    timers.push(window.setTimeout(finish, leaveAt + (reducedMotion ? 0 : 300)))
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') finish()
+      if (event.key === 'Tab') event.preventDefault()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      timers.forEach(window.clearTimeout)
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [visible])
 
-    return () => window.clearInterval(timer)
+  if (!visible) return null
+  const firstLineCount = introLines[0].split(' ').length
+  return (
+    <div className={`home-intro${leaving ? ' is-leaving' : ''}`} id="homeIntro" aria-label={introLines.join(' ')} role="status">
+      <p className="home-intro__text" aria-hidden="true">
+        {introLines.map((line, index) => {
+          const count = Math.max(0, wordCount - (index === 0 ? 0 : firstLineCount))
+          return <span className="home-intro__line" key={line}>
+            {line.split(' ').slice(0, count).join(' ')}
+            {((index === 0 && wordCount <= firstLineCount) || (index === 1 && wordCount > firstLineCount)) && <span className="home-intro__cursor" />}
+          </span>
+        })}
+      </p>
+    </div>
+  )
+}
+
+function App() {
+  const [activeProgressIndex, setActiveProgressIndex] = useState(0)
+
+  useEffect(() => {
+    const updateProgress = () => {
+      const scrollRange = document.documentElement.scrollHeight - window.innerHeight
+      const progress = scrollRange > 0 ? window.scrollY / scrollRange : 0
+      setActiveProgressIndex(Math.round(Math.max(0, Math.min(1, progress)) * (progressSegments.length - 1)))
+    }
+
+    updateProgress()
+    window.addEventListener('scroll', updateProgress, { passive: true })
+    window.addEventListener('resize', updateProgress)
+    const observer = new ResizeObserver(updateProgress)
+    observer.observe(document.body)
+
+    return () => {
+      window.removeEventListener('scroll', updateProgress)
+      window.removeEventListener('resize', updateProgress)
+      observer.disconnect()
+    }
   }, [])
-
-  const handlePrevSlide = () => {
-    setCurrentSlide((slide) => (slide - 1 + heroSlides.length) % heroSlides.length)
-  }
-
-  const handleNextSlide = () => {
-    setCurrentSlide((slide) => (slide + 1) % heroSlides.length)
-  }
 
   return (
     <main className="site-shell">
-      <header className="masthead" aria-label="Primary navigation">
-        <button
-          className="icon-button menu-button"
-          type="button"
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <img src={icons.menu} alt="" />
-        </button>
+      <HomeIntro />
+      <ScrollProgress side="left" activeIndex={activeProgressIndex} />
+      <ScrollProgress side="right" activeIndex={activeProgressIndex} />
 
+      <header className="masthead" aria-label="Primary navigation">
         <a className="wordmark" href="#top" aria-label="the thinkstudios home">
           <img src={logo} alt="the thinkstudios" />
         </a>
 
-        <nav className="social-nav" aria-label="Social links">
-          <a
-            className="social-icon-link"
-            href="https://www.instagram.com/the_thinkstudios/"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Instagram"
-          >
-            <img src={icons.instagram} alt="" />
-          </a>
-          <a className="social-icon-link" href="#films" aria-label="Wedding films">
-            <img src={icons.youtube} alt="" />
-          </a>
-          <a
-            className="social-icon-link"
-            href="https://www.facebook.com/"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Facebook"
-          >
-            <img src={icons.facebook} alt="" />
-          </a>
+        <nav className="nav-links" aria-label="Primary links">
+          <a href="/meet-karthik">Meet Karthik</a>
+          <a href="https://tour-kyrgyzstan.com/gallery.html">Gallery</a>
+          <a className="nav-links__book" href="#book">Book us now</a>
         </nav>
       </header>
 
-      <section className="hero-section" id="top">
+      <section className="hero-section" id="top" aria-label="Wedding cinematography">
         <div className="hero-frame">
-          <img
-            src={heroSlides[currentSlide].src}
-            alt={heroSlides[currentSlide].alt}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
+          <video
+            className="hero__video"
+            src="/ROOPA%20RAJ%20PRE%20WEDDING%20VIDEO_1.mp4"
+            poster="/optimized/hero-dsc-9338.jpg"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
           />
-          <button
-            className="hero-arrow prev"
-            type="button"
-            aria-label="Previous story"
-            onClick={handlePrevSlide}
-          >
-            <img src={icons.left} alt="" />
-          </button>
-          <button
-            className="hero-arrow next"
-            type="button"
-            aria-label="Next story"
-            onClick={handleNextSlide}
-          >
-            <img src={icons.right} alt="" />
-          </button>
+          <div className="hero__overlay" aria-hidden="true" />
+          <p className="hero__label">Wedding films &amp;<br />photography</p>
+          <h1 className="hero__title">Be the star<br />in your own<br />story.</h1>
+          <p className="hero__description">
+            Stories shaped by emotion, atmosphere, and the truth of the moment.
+            Wedding films and photographs, in India and beyond.
+          </p>
+          <a className="hero__link" href="#films">Explore our films <span aria-hidden="true">↗</span></a>
         </div>
+      </section>
 
-        <div className="filmstrip" aria-label="Selected wedding stories">
-          {heroSlides.map((image, index) => (
-            <button
-              key={image.src}
-              className={`filmstrip-item ${index === currentSlide ? 'active' : ''}`}
-              type="button"
-              aria-label={`Open story ${index + 1}`}
-              onClick={() => setCurrentSlide(index)}
-            >
-              <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
-            </button>
-          ))}
-        </div>
+      <section className="home-film" aria-labelledby="home-film-title">
+        <div className="home-film__heading"><p>Through our lens</p><h2 id="home-film-title">A moment. A feeling. A film.</h2></div>
+        <video src="/sasi.mp4" autoPlay muted loop playsInline preload="auto" aria-label="Featured film by the thinkstudios" />
       </section>
 
       <section className="intro editorial">
@@ -305,6 +286,8 @@ function App() {
         </p>
       </section>
 
+      <WeddingAlbums />
+
       <section className="featured-films" id="films" aria-label="Wedding film gallery">
         <div className="featured-films-copy">
           <p className="eyebrow">Featured films</p>
@@ -346,12 +329,16 @@ function App() {
       <section className="public-stories" aria-label="More public gallery stories">
         <div className="public-stories-copy">
           <p className="eyebrow">More from the archive</p>
-          <h2>Newly added frames now live on the site.</h2>
+          <h2>Real moments.<br />Stories to <em>remember.</em></h2>
         </div>
         <div className="public-stories-grid">
           {publicStories.map((image) => (
             <figure key={image.src} className="public-story">
-              <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+              <div className="public-story__image">
+                <img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
+              </div>
+              <figcaption className="public-story__caption">{image.title}</figcaption>
+              <span className="public-story__corners" aria-hidden="true"><i /><i /><i /><i /></span>
             </figure>
           ))}
         </div>
@@ -360,13 +347,10 @@ function App() {
       <section className="awards editorial">
         <p className="eyebrow">Award winning approach</p>
         <h2>Our work is designed for couples who want their wedding to feel like cinema, not a checklist.</h2>
-        <div className="badge-row" aria-label="Studio values">
-          <span>Emotion</span>
-          <span>Story</span>
-          <span>Light</span>
-          <span>Sound</span>
-          <span>Legacy</span>
-          <span>And more</span>
+        <div className="approach-list" aria-label="Studio values">
+          <div className="approach-row"><h3>Emotion &amp; story</h3><p>Honest moments, quiet connections, and the joy of your day, woven into a story that feels like you.</p></div>
+          <div className="approach-row"><h3>Light &amp; sound</h3><p>Thoughtfully composed frames and cinematic sound bring every ritual, glance, and celebration to life.</p></div>
+          <div className="approach-row"><h3>Legacy &amp; more</h3><p>Wedding films and photographs crafted to be revisited, shared, and remembered for generations.</p></div>
         </div>
       </section>
 
@@ -396,123 +380,50 @@ function App() {
         <p>Made with love, in India</p>
       </section>
 
-      <footer className="site-footer">
-        <section className="footer-main">
-          <div className="footer-brand-column">
-            <div className="footer-brand-lockup">
-              <img src={footerLogo} alt="the thinkstudios" />
-              <div className="footer-brand-text">
-                <strong>the thinkstudios</strong>
-              </div>
-            </div>
-            <div className="footer-social-icons">
-              <a
-                className="footer-icon-link"
-                href="https://www.instagram.com/the_thinkstudios"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Instagram"
-              >
-                <img src={icons.instagram} alt="" />
-              </a>
-              <a className="footer-icon-link" href="#films" aria-label="Wedding films">
-                <img src={icons.youtube} alt="" />
-              </a>
-              <a
-                className="footer-icon-link"
-                href="https://www.facebook.com/"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Facebook"
-              >
-                <img src={icons.facebook} alt="" />
-              </a>
+      <EnquiryForm />
+
+      <footer className="studio-footer" id="contact">
+        <img className="studio-footer__logo" src={logo} alt="the thinkstudios" />
+        <div className="studio-footer__main">
+          <div className="studio-footer__brand">
+            <p>We create emotional, cinematic wedding stories in India and beyond. Based in Visakhapatnam, the thinkstudios captures the people, moments, and feelings that make your celebration yours. Wedding cinematography with heart, crafted to be remembered.</p>
+            <div className="studio-footer__direct">
+              <a href="mailto:hello@thethinkstudios.com">hello@thethinkstudios.com</a>
+              <a href="tel:+917675955990">+91 7675955990</a>
             </div>
           </div>
-
-          <div className="footer-column footer-detail-column">
-            <p className="footer-label">Our Location</p>
-            <p className="footer-copy">
-              Visakhapatnam
-            </p>
-            <a className="footer-contact footer-contact-icon" href="tel:+917675955990">
-              <img src={icons.phone} alt="" />
-              +91 7675955990
-            </a>
-            <p className="footer-contact">thethinkstudios.com</p>
-          </div>
-
-          <div className="footer-column footer-detail-column">
-            <p className="footer-label">Office Hours</p>
-            <p className="footer-meta">Monday to Friday</p>
-            <p className="footer-meta">
-              <img src={icons.clock} alt="" />
-              10:00 am to 6:00 pm
-            </p>
-            <p className="footer-meta">
-              <img src={icons.map} alt="" />
-              Visakhapatnam office
-            </p>
-          </div>
-
-          <div className="footer-column footer-links-column">
-            <p className="footer-label">Quick Links</p>
-            <nav className="footer-stack-links" aria-label="Footer quick links">
-              <a href="#experience">About</a>
+          <div className="studio-footer__groups">
+            <nav className="studio-footer__column" aria-label="Footer navigation">
+              <h2>[Navigation]</h2>
+              <a href="/meet-karthik">Meet Karthik</a>
+              <a href="#films">Gallery</a>
+              <a href="#journal">Journal</a>
               <a href="#book">Book us now</a>
-              <a href="#films">Wedding films</a>
             </nav>
-            <a className="footer-book" href="#book">
-              Contact Studio
-            </a>
+            <div className="studio-footer__column">
+              <h2>[Studio]</h2>
+              <span>Visakhapatnam</span>
+              <span>India &amp; beyond</span>
+              <a href="#films">Wedding films</a>
+            </div>
+            <nav className="studio-footer__column" aria-label="Studio contacts">
+              <h2>[Contacts]</h2>
+              <a href="mailto:hello@thethinkstudios.com">Email</a>
+              <a href="https://wa.me/917675955990" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+              <a href="#films">Wedding films</a>
+              <a href="https://www.instagram.com/the_thinkstudios/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            </nav>
+            <div className="studio-footer__column">
+              <h2>[Office hours]</h2>
+              <span>Monday to Friday</span>
+              <span>10:00 am to 6:00 pm</span>
+            </div>
           </div>
-        </section>
-
-        <div className="footer-bottom">
-          <p>Copyright 2026. the_thinkstudios. All rights reserved.</p>
-          <nav className="footer-links" aria-label="Footer links">
-            <a href="#experience">About</a>
-            <a href="#book">Book us now</a>
-            <a href="#films">Wedding films</a>
-          </nav>
-          <p>Wedding cinematography with heart, crafted in Vishakhapatnam.</p>
         </div>
+        <p className="studio-footer__copyright">Copyright 2026. the_thinkstudios. All rights reserved.</p>
       </footer>
 
-      <aside className={`menu-drawer ${menuOpen ? 'open' : ''}`} aria-hidden={!menuOpen}>
-        <div className="menu-drawer-inner">
-          <div className="menu-drawer-top">
-            <button
-              className="drawer-close"
-              type="button"
-              aria-label="Close menu"
-              onClick={() => setMenuOpen(false)}
-            >
-              <img src={icons.close} alt="" />
-            </button>
-            <a className="drawer-logo" href="#top" onClick={() => setMenuOpen(false)}>
-              <img src={logo} alt="the thinkstudios" />
-            </a>
-          </div>
-          <nav>
-            {menuItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                target={item.external ? '_blank' : undefined}
-                rel={item.external ? 'noreferrer' : undefined}
-                onClick={() => setMenuOpen(false)}
-              >
-                <img src={icons[item.icon]} alt="" />
-                {item.label}
-              </a>
-            ))}
-          </nav>
-          <a className="drawer-instagram" href="https://www.instagram.com/the_thinkstudios/" target="_blank" rel="noreferrer">
-            Visit Instagram
-          </a>
-        </div>
-      </aside>
+
     </main>
   )
 }

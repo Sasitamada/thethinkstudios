@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/meet-karthik", "destination": "/index.html" },
+    { "source": "/meet-karthik/", "destination": "/index.html" }
+  ]
+}

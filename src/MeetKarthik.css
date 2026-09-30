@@ -1,0 +1,27 @@
+.meet-page { background: #f7f6f3; }
+.meet-nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 24px 6%; border-bottom: 1px solid #ddd; }
+.meet-nav img { width: 210px; max-width: 40vw; filter: brightness(0); }
+.meet-nav nav { display: flex; gap: 26px; flex-wrap: wrap; }
+.meet-nav a, .meet-footer a { color: inherit; font-size: 12px; text-decoration: none; text-transform: uppercase; }
+.meet-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 10%; align-items: center; padding: 85px 6%; }
+.meet-eyebrow { font-size: 12px; text-transform: uppercase; }
+.meet-intro h1 { margin: 28px 0; font-size: clamp(64px, 8vw, 130px); line-height: .95; font-weight: 500; }
+.meet-intro p:not(.meet-eyebrow), .meet-approach div p { font-size: 14px; line-height: 1.9; max-width: 510px; color: #666; }
+.meet-intro .meet-lead { color: #111; }
+.meet-cta { display: inline-block; margin-top: 24px; background: #ff3b00; padding: 18px 22px; color: white; font-size: 12px; text-decoration: none; }
+.site-shell .meet-cta:hover { background: #111; color: white; }
+.meet-intro figure { margin: 0; }
+.meet-intro figure img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.meet-intro figcaption { margin-top: 14px; font-size: 10px; text-transform: uppercase; color: #777; }
+.meet-approach { padding: 70px 6%; background: #0d0d0d; color: #fff; display: grid; grid-template-columns: 1fr 1fr; gap: 30px 10%; }
+.meet-approach > .meet-eyebrow { grid-column: 1 / -1; }
+.meet-approach h2 { font-size: clamp(36px, 4vw, 64px); line-height: 1.1; margin: 0; }
+.meet-approach div p { color: #aaa; }
+.meet-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; padding: 36px 6%; }
+@media (max-width: 700px) { .meet-nav { padding: 20px; } .meet-nav nav { gap: 12px; } .meet-nav a { font-size: 10px; } .meet-intro, .meet-approach { grid-template-columns: 1fr; padding: 50px 28px; gap: 36px; } .meet-footer { flex-direction: column; padding: 30px 28px; } }
+.meet-intro > *, .meet-approach > * { min-width: 0; }
+@media (max-width: 700px) {
+  .meet-intro, .meet-approach { grid-template-columns: minmax(0, 1fr); }
+  .meet-intro h1 { font-size: clamp(54px, 13vw, 90px); }
+  .meet-cta { max-width: 100%; line-height: 1.6; }
+}
