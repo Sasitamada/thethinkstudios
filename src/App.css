@@ -1551,3 +1551,7 @@ h2 {
 @media (max-width: 980px) {
   .site-shell :is(.intro, .experience, .featured-films, .recent-frames, .journal, .booking) { padding: 54px 28px; }
 }
+
+.site-shell .featured-films { background: #fff; }
+.site-shell .journal,
+.site-shell .booking { background: #bebebe; }
