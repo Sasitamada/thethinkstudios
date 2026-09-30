@@ -89,7 +89,7 @@ export default function WeddingAlbums() {
                   {album.images ? <>
                     <img src={`/optimized/${album.images[0]}`} alt={`${album.name} by the thinkstudios`} loading="lazy" />
                     <button type="button" className="albums-discover" onClick={() => setOpened(index)}>[ View album ]</button>
-                  </> : <div className="albums-invitation"><p>Your story.<br />Our next inspiration.</p><a href="#book">[ Book us now ]</a></div>}
+                  </> : <div className="albums-invitation"><p>Your story.<br />Our next inspiration.</p><a href="/contact">[ Book us now ]</a></div>}
                 </div>
               ))}
             </div>
