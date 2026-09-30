@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import logo from './assets/logo-header.png'
+import SiteHeader from './SiteHeader'
 import './App.css'
 import WeddingAlbums from './WeddingAlbums'
 import EnquiryForm from './EnquiryForm'
@@ -205,17 +205,7 @@ function App() {
       <ScrollProgress side="left" activeIndex={activeProgressIndex} />
       <ScrollProgress side="right" activeIndex={activeProgressIndex} />
 
-      <header className="masthead" aria-label="Primary navigation">
-        <a className="wordmark" href="#top" aria-label="the thinkstudios home">
-          <img src={logo} alt="the thinkstudios" />
-        </a>
-
-        <nav className="nav-links" aria-label="Primary links">
-          <a href="/meet-karthik">Meet Karthik</a>
-          <a href="https://tour-kyrgyzstan.com/gallery.html">Gallery</a>
-          <a className="nav-links__book" href="/contact">Book us now</a>
-        </nav>
-      </header>
+      <SiteHeader overlay />
 
       <section className="hero-section" id="top" aria-label="Wedding cinematography">
         <div className="hero-frame">
